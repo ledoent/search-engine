@@ -68,10 +68,8 @@ class SeIndex(models.Model):
             ["index_id", "state"],
             aggregates=["__count"],
         )
-        _all = 0
         for index, state, count in data:
             res[index][state] = count
-            _all += count
 
         def get(index, states):
             return sum([res[index][state] for state in states])
@@ -90,7 +88,9 @@ class SeIndex(models.Model):
                 ],
             )
             record.count_error = get(record, ["invalid_data", "recompute_error"])
-            record.count_all = _all
+            record.count_all = (
+                record.count_done + record.count_pending + record.count_error
+            )
             if record.count_error:
                 record.color = 1
             elif record.count_pending:
@@ -373,7 +373,7 @@ class SeIndex(models.Model):
         better to force a resynchronization"""
         for index in self:
             item_ids = []
-            adapter = self.se_adapter
+            adapter = index.se_adapter
             binding_model = self.env[index.model_id.model]
             for index_record in adapter.each(fetch_fields=["id"]):
                 _id = index_record["id"]
