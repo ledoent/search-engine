@@ -139,7 +139,7 @@ class ElasticSearchAdapter(SearchEngineAdapter):
         if not res["acknowledged"]:
             raise SystemError(
                 _lt(
-                    "Unable to clear index %(index_name)s: %(result)",
+                    "Unable to clear index %(index_name)s: %(result)s",
                     index_name=index_name,
                     result=res,
                 )
