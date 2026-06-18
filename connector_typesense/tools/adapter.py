@@ -99,7 +99,7 @@ class TypesenseAdapter(SearchEngineAdapter):
                 _lt(
                     "Unable to index all records. (nbr errors: %(errors)s, "
                     "total: %(total)s)\n%(result)s",
-                    errors=len(res),
+                    errors=errors,
                     total=len(records),
                     result=res,
                 )
